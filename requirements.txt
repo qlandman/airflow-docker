@@ -1,0 +1,3 @@
+#pandas==0.25.0 #already in Airflow
+#numpy==1.16.4 #already in Airflow
+numba==0.45.*

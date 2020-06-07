@@ -1,0 +1,30 @@
+version: '2.1'
+services:
+    airflow:
+        # image: apache/airflow:1.10.10
+        build:
+            context: .
+            args:
+                - DOCKER_UID=1000
+            dockerfile: Dockerfile
+        restart: always
+        environment:
+            - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgres://airflow:airflow@postgres:5432/airflow
+            - AIRFLOW__CORE__FERNET_KEY=GUYoGcG5xdn5K3ysGG3LQzOt3cc0UBOEibEPxugDwas=
+            - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+            - AIRFLOW__CORE__AIRFLOW_HOME=/opt/airflow/
+            - AIRFLOW__CORE__LOAD_EXAMPLES=False
+            - AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False
+            - AIRFLOW__CORE__LOGGING_LEVEL=info
+        volumes:
+            - ./airflow/dags:/opt/airflow/dags
+            - ./airflow/plugins:/opt/airflow/plugins
+            - ./airflow/data_dump:/opt/airflow/data_dump
+            - ./airflow/logs:/opt/airflow/logs
+            - ./requirements.txt:/requirements.txt
+
+        healthcheck:
+            test: ["CMD-SHELL", "[ -f /opt/airflow/airflow-webserver.pid ]"]
+            interval: 30s
+            timeout: 30s
+            retries: 3

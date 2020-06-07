@@ -1,0 +1,3 @@
+postgres_data/
+airflow/
+.DS_Store
