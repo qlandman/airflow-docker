@@ -8,11 +8,11 @@ services:
             - POSTGRES_PASSWORD=airflow
             - POSTGRES_DB=airflow
             - PGDATA=/var/lib/postgresql/data/pgdata
-        user: "1000:1000"
+        user: "1000:999"
         volumes:
             - ./postgres_data:/var/lib/postgresql/data/pgdata
         ports:
-            - 5432:5432
+            - 5434:5432
 
     webserver:
         extends:
@@ -24,9 +24,6 @@ services:
             - postgres
         ports:
             - 8080:8080
-        networks:
-            - proxy
-            - default
         environment:
             # Web Server Config
             - AIRFLOW__WEBSERVER__DAG_DEFAULT_VIEW=graph
@@ -37,7 +34,7 @@ services:
             - AIRFLOW__WEBSERVER__WORKERS=3
             # Restart workers every 30min instead of 30seconds
             - AIRFLOW__WEBSERVER__WORKER_REFRESH_INTERVAL=1800
-        user: "1000:1000"
+        user: "1000:999"
 
     scheduler:
         extends:
@@ -52,8 +49,5 @@ services:
             # Reduce how often DAGs are reloaded to dramatically reduce CPU use
             - AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL=${AF_MIN_FILE_PROCESS_INTERVAL-60} 
             - AIRFLOW__SCHEDULER__MAX_THREADS=${AF_THREADS-1}
-        user: "1000:1000"
+        user: "1000:999"
         
-networks:
-    proxy:
-        external: true
