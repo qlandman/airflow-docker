@@ -42,7 +42,7 @@ conf:
 
 initdb:
 	docker-compose run --rm $(SERVICE) initdb
-	docker-compose run --rm $(SERVICE) airflow create_user -r Admin -u admin -e admin@example.com -f admin -l user -p test
+	docker-compose run --rm $(SERVICE) create_user -r Admin -u admin -e admin@example.com -f admin -l user -p test
 
 upgradedb:
 	docker-compose run --rm $(SERVICE) upgradedb
